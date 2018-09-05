@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message SampleServicePbResult {
+    string result = 1;
+}
+
+message SampleServicePbRequest {
+    string name = 1;
+}
+

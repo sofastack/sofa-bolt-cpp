@@ -1,0 +1,123 @@
+targets = {
+    'bolt-rpc-client': cpp_library (
+        srcs = [
+        'second_party/fmt/src/format.cc',
+        'src/common/common_defines.cpp',
+        'src/common/log.cpp',
+        'src/common/io_buffer.cpp',
+        'src/common/uri.cpp',
+        'src/protocol/protocol_define.cpp',
+        'src/protocol/bolt/bolt_protocol.cpp',
+        'src/protocol/bolt/bolt_response.cpp',
+        'src/protocol/response_base.cpp',
+        'src/protocol/http/http_protocol.cpp',
+        'src/protocol/http/http_parser.c',
+        'src/protocol/http/http_header.cpp',
+        'src/protocol/http/http_request.cpp',
+        'src/protocol/http/http_response.cpp',
+        'src/tcp/endpoint.cpp',
+        'src/tcp/socket_manager.cpp',
+        'src/tcp/socket.cpp',
+        'src/tcp/socket_posix.cpp',
+        'src/schedule/epoll_loop.cpp',
+        'src/schedule/loop_thread.cpp',
+        'src/schedule/time_thread.cpp',
+        'src/schedule/schedule.cpp',
+        'src/channel/channel.cpp',
+        'src/session/session.cpp',
+        ],
+        incs = [
+            'include',
+            'src',
+            'second_party/fmt/include',
+        ],
+        deps = [
+            'protobuf-3.2.0:protobuf',
+        ],
+        cxxflags = [
+            '-DOS_LINUX',
+        ],
+        ldflags = [
+            '-L/lib64 -L/usr/lib64',
+        ],
+    ),
+    'sample_proto_generation': cpp_utility (
+        srcs = [ 
+            'example/sample.proto',
+        ],  
+        deps = [ 
+            'protobuf-3.2.0:protobuf',
+        ],  
+    ),
+    'sample': cpp_program (
+        srcs = [
+            'example/sample.pb.cc',
+            'example/single_request_example.cpp',
+        ],
+        deps = [
+            ':bolt-rpc-client',
+            'protobuf-3.2.0:protobuf',
+            'sample_proto_generation',
+        ],
+        incs = [
+            'include',
+            'example',
+            'second_party/fmt/include',
+        ],
+        cxxflags = [
+            '-DOS_LINUX',
+        ],
+        ldflags = [
+            '-L/lib64 -L/usr/lib64',
+        ],
+    ),
+    'ut_proto_generation': cpp_utility (
+        srcs = [ 
+            'test/unit_test/io_buffer_unittest.proto',
+        ],  
+        deps = [ 
+            'protobuf-3.2.0:protobuf',
+        ],  
+    ),
+    'bolt-rpc-client_test' : cpp_fast_test (
+        srcs = [
+            'test/unit_test/unittest_main.cpp',
+            'test/unit_test/endpoint_unittest.cpp',
+            'test/unit_test/channel_unittest.cpp',
+            'test/unit_test/io_buffer_unittest.pb.cc',
+            'test/unit_test/io_buffer_unittest.cpp',
+            'test/unit_test/lifecyclelock_unittest.cpp',
+            'test/unit_test/mpscqueue_unittest.cpp',
+            'test/unit_test/simple_socket_server.cpp',
+            'test/unit_test/socket_manager_unittest.cpp',
+            'test/unit_test/socket_posix_unittest.cpp',
+            'test/unit_test/thread_pool_unittest.cpp',
+            'test/unit_test/time_thread_unittest.cpp',
+            'test/unit_test/uri_unittest.cpp',
+            'test/unit_test/utils_unittest.cpp',
+            'test/unit_test/http_unittest.cpp',
+            'test/unit_test/intrusivelist_unittest.cpp',
+            'test/unit_test/concurrenthashmap_unittest.cpp',
+            'test/unit_test/lrucache_unittest.cpp',
+        ],
+        incs = [
+            'include',
+            'test/unit_test',
+            'src',
+            'second_party/fmt/include',
+        ],
+        testing = [
+            'bolt-rpc-client',
+        ],
+        build_deps = [
+            'ut_proto_generation',
+        ],
+        deps = [
+            'gtest-1.7.0:gtest',
+            'gtest-1.7.0:gtest_main',
+            ':bolt-rpc-client',
+            'protobuf-3.2.0:protobuf',
+        ]
+    ),
+}
+

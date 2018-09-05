@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/zhenggu.xwt/Projects/antflash/src/protocol/http/http_parser.c
+http_parser.h
+/Users/zhenggu.xwt/Projects/antflash/src/protocol/http/http_parser.h
+assert.h
+-
+stddef.h
+-
+ctype.h
+-
+string.h
+-
+limits.h
+-
+
+/Users/zhenggu.xwt/Projects/antflash/src/protocol/http/http_parser.h
+stddef.h
+-
+BaseTsd.h
+-
+stdint.h
+-
+

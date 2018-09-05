@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message UnitTestMessage {
+    repeated string msg = 1;
+    repeated int32 code = 2;
+}
+
+message UnitTestProto {
+    string name = 1;
+    int64 id = 2;
+    uint32 uid = 3;
+    UnitTestMessage msg = 4;
+}

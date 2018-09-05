@@ -1,0 +1,3 @@
+# Hashes of file build rules.
+3861aacd27d79a156195c55af85017fa io_buffer_unittest.pb.cc
+c98a894ac4eaf634e0191b192bee459e sample.pb.cc
