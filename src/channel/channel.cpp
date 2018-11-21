@@ -141,6 +141,8 @@ bool Channel::init(const char* address,
 bool Channel::getSocket(std::shared_ptr<antflash::Socket> &socket) {
     if (_options.connection_type == EConnectionType::CONNECTION_TYPE_POOLED) {
         return getSubSocketInternal(socket);
+    } else if (_options.connection_type == EConnectionType::CONNECTION_TYPE_SHORT) {
+        return tryConnect(socket);
     } else {
         return getSocketInternal(socket);
     }
@@ -154,13 +156,6 @@ bool Channel::getSocketInternal(std::shared_ptr<Socket>& socket) {
         if (!guard.shared()) {
             LOG_INFO("some other thread is trying to create new socket now");
             return false;
-        }
-
-        //Set socket status to INIT every time
-        if (_options.connection_type == EConnectionType::CONNECTION_TYPE_SHORT) {
-            if (_socket) {
-                _socket->setStatus(ERpcStatus::RPC_STATUS_INIT);
-            }
         }
 
         //Channel always hold the ownership of its creating sockets
@@ -196,7 +191,6 @@ bool Channel::getSocketInternal(std::shared_ptr<Socket>& socket) {
     }
 
     //Try create a new socket connection
-    LOG_INFO("try reconnect to remote:{}", _address.ipToStr());
     bool ret = tryConnect(_socket);
     if (ret) {
         socket = _socket;
@@ -211,7 +205,7 @@ bool Channel::getSocketInternal(std::shared_ptr<Socket>& socket) {
 }
 
 bool Channel::tryConnect(std::shared_ptr<Socket>& socket) {
-    LOG_DEBUG("try connect socket");
+    LOG_INFO("try connect to remote:{}", _address.ipToStr());
     socket.reset(new Socket(_address));
     //Hold the ownership of this socket to make sure not be reclaimed by socket manager
     //Always success here.
